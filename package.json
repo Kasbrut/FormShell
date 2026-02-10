@@ -1,0 +1,48 @@
+{
+  "name": "formshell",
+  "version": "1.0.0",
+  "description": "Elegant framework for creating interactive multi-step forms directly in the browser console",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./global": {
+      "types": "./dist/global.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "dev": "vite",
+    "types": "tsc -b",
+    "build": "tsc && vite build && cp src/formshell/global.d.ts dist/global.d.ts",
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit"
+  },
+  "keywords": [
+    "formshell",
+    "console",
+    "shell",
+    "tui",
+    "form",
+    "interactive",
+    "cli",
+    "browser",
+    "survey",
+    "questionnaire"
+  ],
+  "author": "Kasbrut",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^25.2.2",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.12",
+    "vite-plugin-dts": "^3.7.2"
+  }
+}
