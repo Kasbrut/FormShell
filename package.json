@@ -19,7 +19,7 @@
     "dev": "vite --config vite.site.config.ts",
     "types": "tsc -b",
     "build": "tsc && vite build",
-    "build:site": "vite build --config vite.site.config.ts",
+    "build:site": "tsc && vite build && vite build --config vite.site.config.ts",
     "preview": "vite preview --config vite.site.config.ts",
     "type-check": "tsc --noEmit"
   },
