@@ -1,6 +1,6 @@
 {
   "name": "formshell",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Elegant framework for creating interactive multi-step forms directly in the browser console",
   "type": "module",
   "main": "./dist/index.js",

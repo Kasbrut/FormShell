@@ -2,7 +2,7 @@
 
 An elegant framework for creating interactive multi-step forms directly in the browser console.
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.0.1-blue.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Browser](https://img.shields.io/badge/browser-Chrome%20%7C%20Firefox%20%7C%20Safari-orange.svg)

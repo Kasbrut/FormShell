@@ -17,6 +17,9 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export default defineConfig({
+  // Disable public directory for library build (favicon is only for the examples site)
+  publicDir: false,
+
   plugins: [
     dts({ 
       include: ['src/formshell/**/*.ts'],
