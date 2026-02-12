@@ -4,6 +4,8 @@
  * One-question-at-a-time style with simple API for interaction
  */
 
+import './global.d.ts';
+
 import {
   ChoiceField,
   FieldFactory,

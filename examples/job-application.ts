@@ -4,8 +4,8 @@
  * Questions are dynamically shown based on the selected position
  */
 
-import { FormShell } from '../src/formshell/form-framework.js';
-import type { FormConfig } from '../src/formshell/types.js';
+import { FormShell } from '../dist/index.js';
+import type { FormConfig } from '../dist/index.js';
 
 /**
  * Job application configuration with conditional questions

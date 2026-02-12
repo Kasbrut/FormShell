@@ -3,8 +3,8 @@
  * Complete implementation using FormShell
  */
 
-import { FormShell } from '../src/formshell/form-framework.js';
-import type { FormConfig } from '../src/formshell/types.js';
+import { FormShell } from '../dist/index.js';
+import type { FormConfig } from '../dist/index.js';
 
 /**
  * Contact form configuration

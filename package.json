@@ -9,9 +9,6 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
-    },
-    "./global": {
-      "types": "./dist/global.d.ts"
     }
   },
   "files": [
@@ -19,10 +16,11 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --config vite.site.config.ts",
     "types": "tsc -b",
-    "build": "tsc && vite build && cp src/formshell/global.d.ts dist/global.d.ts",
-    "preview": "vite preview",
+    "build": "tsc && vite build",
+    "build:site": "vite build --config vite.site.config.ts",
+    "preview": "vite preview --config vite.site.config.ts",
     "type-check": "tsc --noEmit"
   },
   "keywords": [

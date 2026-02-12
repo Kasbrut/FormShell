@@ -1,109 +1,39 @@
+/**
+ * Vite config for building the FormShell library (npm package).
+ *
+ * This config is used ONLY by `pnpm run build` to produce the
+ * distributable library in dist/.
+ *
+ * For the dev server and the examples site build, see vite.site.config.ts.
+ */
+
+import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import type { Plugin } from "vite";
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-interface MockEndpointConfig {
-  route: string;
-  buildResponse: (data: Record<string, unknown>) => Record<string, unknown>;
-}
-
-/** Generic mock API plugin factory for dev server */
-function mockApiPlugin(name: string, config: MockEndpointConfig): Plugin {
-  return {
-    name: `mock-${name}-api`,
-    configureServer(server) {
-      server.middlewares.use((req, res, next) => {
-        if (req.method === "POST" && req.url === config.route) {
-          const chunks: Buffer[] = [];
-          req.on("data", (chunk: Buffer) => chunks.push(chunk));
-          req.on("end", () => {
-            try {
-              const body = Buffer.concat(chunks).toString();
-              const data = JSON.parse(body || "{}") as Record<string, unknown>;
-              const response = config.buildResponse(data);
-              res.writeHead(200, { "Content-Type": "application/json" });
-              res.end(JSON.stringify(response));
-            } catch {
-              res.writeHead(400, { "Content-Type": "application/json" });
-              res.end(JSON.stringify({ success: false, error: "Invalid JSON" }));
-            }
-          });
-          return;
-        }
-        next();
-      });
-    }
-  };
-}
-
-/** Mock endpoint: Job applications */
-function mockApplicationsApi(): Plugin {
-  return mockApiPlugin("applications", {
-    route: "/api/applications",
-    buildResponse: (data) => ({
-      success: true,
-      message: "Application received successfully",
-      applicationId: `app-${Date.now()}`,
-      ...data
-    })
-  });
-}
-
-/** Mock endpoint: Contact form */
-function mockContactApi(): Plugin {
-  return mockApiPlugin("contact", {
-    route: "/api/contact",
-    buildResponse: (data) => ({
-      success: true,
-      message: "Contact request received. We'll get back to you soon!",
-      contactId: `cnt-${Date.now()}`,
-      ...data
-    })
-  });
-}
-
-/** Mock endpoint: Survey responses */
-function mockSurveyApi(): Plugin {
-  return mockApiPlugin("survey", {
-    route: "/api/survey",
-    buildResponse: (data) => {
-      // Compute average rating from rating fields
-      const ratingKeys = [
-        "overall_satisfaction", "ease_of_use", "performance",
-        "customer_support", "value_for_money"
-      ];
-      const ratings = ratingKeys
-        .map((key) => data[key])
-        .filter((v): v is number => typeof v === "number");
-      const averageRating = ratings.length > 0
-        ? Number((ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1))
-        : null;
-
-      return {
-        success: true,
-        message: "Survey response recorded. Thank you for your feedback!",
-        surveyId: `srv-${Date.now()}`,
-        averageRating,
-        ...data
-      };
-    }
-  });
-}
-
 export default defineConfig({
   plugins: [
-    mockApplicationsApi(),
-    mockContactApi(),
-    mockSurveyApi(),
     dts({ 
       include: ['src/formshell/**/*.ts'],
       outDir: 'dist',
-      rollupTypes: true
+      rollupTypes: true,
+      afterBuild() {
+        // @microsoft/api-extractor (used by rollupTypes) strips `declare global` blocks.
+        // Read the source global.d.ts and append its declare global block to the rolled-up output.
+        const indexDtsPath = resolve(__dirname, 'dist/index.d.ts');
+        const globalDtsPath = resolve(__dirname, 'src/formshell/global.d.ts');
+        const globalDts = readFileSync(globalDtsPath, 'utf-8');
+        const match = globalDts.match(/declare global \{[\s\S]*?\n\}/);
+        if (match) {
+          const content = readFileSync(indexDtsPath, 'utf-8');
+          writeFileSync(indexDtsPath, content + '\n' + match[0] + '\n');
+        }
+      }
     })
   ],
   build: {
