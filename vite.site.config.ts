@@ -199,9 +199,14 @@ export default defineConfig({
   // GitHub Pages serves from https://<user>.github.io/FormShell/
   base: "/FormShell/",
 
+  // Public directory: files here are copied to the build output root
+  publicDir: "public",
+
   build: {
     outDir: "site-dist",
-    emptyOutDir: true
+    emptyOutDir: true,
+    // Copy favicon to the build output
+    copyPublicDir: true
   },
 
   resolve: {
